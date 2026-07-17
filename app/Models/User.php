@@ -20,6 +20,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        // Champs de moderation : modifies uniquement via les routes admin
+        // protegees. 'is_admin' est volontairement EXCLU pour empecher toute
+        // elevation de privileges par assignation de masse.
+        'banned_at',
+        'ban_reason',
     ];
 
     /**

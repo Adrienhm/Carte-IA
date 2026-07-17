@@ -21,10 +21,11 @@ class UserSeeder extends Seeder
             [
                 'name' => 'Administrateur',
                 'password' => Hash::make('password'),
-                'is_admin' => true,
                 'email_verified_at' => now(),
             ],
         );
+        // is_admin n'est pas mass-assignable : on l'affecte explicitement.
+        $admin->forceFill(['is_admin' => true])->save();
 
         $alice = User::updateOrCreate(
             ['email' => 'alice@nationsglory.test'],
