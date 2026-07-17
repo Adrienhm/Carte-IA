@@ -54,7 +54,7 @@ class Card extends Model
     /** @return BelongsToMany<Pack, $this> */
     public function packs(): BelongsToMany
     {
-        return $this->belongsToMany(Pack::class)->withPivot('weight')->withTimestamps();
+        return $this->belongsToMany(Pack::class, 'pack_card')->withPivot('weight')->withTimestamps();
     }
 
     /** @return HasMany<UserCard, $this> */
