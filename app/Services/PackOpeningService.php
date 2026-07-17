@@ -77,8 +77,6 @@ class PackOpeningService
             // Le pack est consomme apres un tirage reussi.
             $userPack->delete();
 
-            $obtained->load('card.rarity', 'card.cardType');
-
             return $obtained;
         });
     }
