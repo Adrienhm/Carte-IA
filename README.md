@@ -1,59 +1,112 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# NationsGlory Cards — Plateforme de cartes de collection IA
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Plateforme web de cartes de collection pour l'univers Minecraft **NationsGlory**.
+Les cartes (nom, description, statistiques, illustration) sont générées par une
+**intelligence artificielle**, distribuées via des **packs à raretés pondérées**
+(système gacha), collectionnées dans un inventaire et **échangées entre joueurs**
+de manière sécurisée.
 
-## About Laravel
+Projet réalisé en **Laravel 12 / PHP 8.2 / MySQL / Tailwind CSS**.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Fonctionnalités
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Joueur
+- Inscription / connexion / déconnexion (Laravel Breeze)
+- Ouverture de packs avec tirage pondéré côté serveur et **animation de révélation**
+- Inventaire filtrable (par type, par rareté) avec valeur totale de la collection
+- Annuaire des joueurs et **profils publics**
+- **Échanges sécurisés** : proposition, validation bilatérale, blocage des cartes
+  engagées, transfert atomique, historique
 
-## Learning Laravel
+### Administrateur
+- Tableau de bord et statistiques
+- CRUD des cartes + **génération par IA** (nom, description, stats, image)
+- Types de cartes **dynamiques** (ajout / modification / suppression)
+- CRUD des packs avec **éditeur de composition** et probabilités calculées en direct
+- Gestion des joueurs : recherche, bannissement, consultation d'inventaire,
+  suppression de cartes, attribution de packs
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Prérequis
 
-## Laravel Sponsors
+- PHP >= 8.2 avec les extensions `pdo_mysql`, `gd`, `zip`, `intl`, `mbstring`, `openssl`
+- Composer
+- MySQL (ou MariaDB) — testé avec le MySQL fourni par XAMPP
+- Node.js + npm (build des assets)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Installation
 
-### Premium Partners
+```bash
+# 1. Dépendances PHP et JS
+composer install
+npm install
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# 2. Configuration
+cp .env.example .env
+php artisan key:generate
 
-## Contributing
+# 3. Base de données
+#    Créez la base puis renseignez DB_* dans .env
+#    (par défaut : nationsglory_cards, utilisateur root sans mot de passe)
+mysql -u root -e "CREATE DATABASE nationsglory_cards CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# 4. Migrations + données de démonstration
+php artisan migrate:fresh --seed
 
-## Code of Conduct
+# 5. Lien de stockage des images générées
+php artisan storage:link
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# 6. Build des assets
+npm run build
 
-## Security Vulnerabilities
+# 7. Lancement
+php artisan serve
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+L'application est disponible sur http://127.0.0.1:8000.
 
-## License
+## Comptes de démonstration
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+| Rôle    | Email                       | Mot de passe |
+|---------|-----------------------------|--------------|
+| Admin   | admin@nationsglory.test     | password     |
+| Joueur  | alice@nationsglory.test     | password     |
+| Joueur  | bob@nationsglory.test       | password     |
+
+Chaque compte démarre avec 6 packs à ouvrir.
+
+---
+
+## Génération IA — deux moteurs interchangeables
+
+La génération IA est encapsulée derrière l'interface `CardGenerator`. Deux drivers
+sont fournis, sélectionnables via `CARD_AI_DRIVER` dans le `.env` :
+
+- **`fake`** (par défaut) — génération **locale, hors-ligne et gratuite**. Produit
+  un nom, une description et une illustration PNG dessinée localement (GD), colorée
+  selon la rareté. Permet de développer, tester et démontrer le projet **sans clé
+  d'API ni coût**.
+- **`openai`** — génération réelle : **GPT** pour le texte, **DALL-E** pour l'image.
+  Renseignez alors `OPENAI_API_KEY` dans le `.env` et passez `CARD_AI_DRIVER=openai`.
+
+> Les clés d'API ne vivent que dans le `.env`, jamais dans le code source. Tous les
+> appels IA sont effectués côté serveur, et les images reçues sont stockées
+> localement pour éviter les appels répétés.
+
+## Tests
+
+```bash
+php artisan test
+```
+
+51 tests (SQLite en mémoire) couvrent les règles critiques : tirage pondéré,
+atomicité et non-duplication des échanges, blocage des cartes, protections
+d'accès administrateur, bornes des statistiques générées.
+
+## Documentation
+
+Le rapport technique détaillé (architecture, choix techniques, équilibrage
+économique) se trouve dans [`docs/RAPPORT.md`](docs/RAPPORT.md).
