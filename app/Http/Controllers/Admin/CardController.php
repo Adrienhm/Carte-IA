@@ -37,11 +37,6 @@ class CardController extends Controller
         return view('admin.cards.create', $this->formData());
     }
 
-    /**
-     * Generation IA d'une carte (CDC 5.1) : produit et enregistre directement
-     * une carte complete (nom, description, stats, image) a partir du type et
-     * de la rarete choisis. L'admin peut ensuite l'editer.
-     */
     public function generate(Request $request, CardComposer $composer): RedirectResponse
     {
         $validated = $request->validate([
