@@ -18,7 +18,6 @@ class WeightedDrawServiceTest extends TestCase
 
     public function test_it_only_returns_candidates_with_positive_weight(): void
     {
-        // 'b' a un poids nul : il ne doit jamais sortir.
         $weights = ['a' => 5, 'b' => 0, 'c' => 5];
 
         for ($i = 0; $i < 200; $i++) {
@@ -28,8 +27,6 @@ class WeightedDrawServiceTest extends TestCase
 
     public function test_distribution_roughly_follows_weights(): void
     {
-        // 90/10 : sur un grand nombre de tirages, 'commune' doit largement
-        // dominer. On verifie l'ordre de grandeur, pas une valeur exacte.
         $weights = ['commune' => 90, 'rare' => 10];
         $draws = $this->service->drawMany($weights, 5000);
 

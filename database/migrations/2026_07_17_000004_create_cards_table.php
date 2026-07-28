@@ -13,9 +13,6 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
 
-            // restrictOnDelete : supprimer un type ou une rarete encore utilise
-            // laisserait des cartes orphelines. L'admin doit d'abord reaffecter
-            // les cartes concernees.
             $table->foreignId('card_type_id')->constrained()->restrictOnDelete();
             $table->foreignId('rarity_id')->constrained()->restrictOnDelete();
 
@@ -25,7 +22,6 @@ return new class extends Migration
 
             $table->string('image_path')->nullable();
 
-            // Tracabilite de la generation IA (CDC 9).
             $table->boolean('is_ai_generated')->default(false);
             $table->text('image_prompt')->nullable();
 

@@ -34,9 +34,6 @@ class TradeController extends Controller
         ]);
     }
 
-    /**
-     * Formulaire de proposition : mes cartes disponibles vs celles du partenaire.
-     */
     public function create(Request $request, User $user): View
     {
         $me = $request->user();
@@ -82,7 +79,6 @@ class TradeController extends Controller
 
     public function show(Request $request, Trade $trade): View
     {
-        // Seuls les deux protagonistes peuvent consulter l'echange (CDC 6).
         abort_unless($trade->involves($request->user()), 403);
 
         $trade->load(['sender', 'receiver', 'items.userCard.card.rarity', 'items.userCard.card.cardType']);
@@ -123,8 +119,6 @@ class TradeController extends Controller
     }
 
     /**
-     * Exemplaires echangeables d'un joueur (non bloques), regroupes par carte.
-     *
      * @return Collection<int, UserCard>
      */
     private function availableCards(User $user): Collection

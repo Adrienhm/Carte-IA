@@ -10,11 +10,6 @@ use App\Models\User;
 use App\Models\UserCard;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Fabriques minimales partagees par les tests. On construit les entites a la
- * main plutot que via des factories Eloquent : le schema est specifique au
- * projet et ces helpers restent lisibles.
- */
 trait GameTestHelpers
 {
     protected function makeRarity(array $overrides = []): Rarity
@@ -65,8 +60,6 @@ trait GameTestHelpers
 
     protected function makeUser(array $overrides = []): User
     {
-        // is_admin n'est pas mass-assignable (protection contre l'elevation de
-        // privileges) : on le force explicitement quand un test le demande.
         $isAdmin = (bool) ($overrides['is_admin'] ?? false);
         unset($overrides['is_admin']);
 
@@ -88,9 +81,6 @@ trait GameTestHelpers
         return $this->makeUser(['is_admin' => true]);
     }
 
-    /**
-     * Donne un exemplaire d'une carte a un joueur et le renvoie.
-     */
     protected function giveCard(User $user, Card $card): UserCard
     {
         return UserCard::create([
@@ -101,8 +91,6 @@ trait GameTestHelpers
     }
 
     /**
-     * Cree un pack contenant les cartes fournies avec leurs poids.
-     *
      * @param  array<int, int>  $cardWeights  [card_id => weight]
      */
     protected function makePack(array $cardWeights, int $cardsPerPack = 5): Pack

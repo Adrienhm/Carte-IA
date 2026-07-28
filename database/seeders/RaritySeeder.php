@@ -5,18 +5,6 @@ namespace Database\Seeders;
 use App\Models\Rarity;
 use Illuminate\Database\Seeder;
 
-/**
- * Raretes et equilibrage economique (CDC 7).
- *
- * Distribution cible a l'ouverture (CDC 7.1) : Commune 70 %, Rare 20 %,
- * Epique 9 %, Legendaire 1 %. Les "default_weight" reproduisent ce ratio
- * (70/20/9/1) et servent de poids par defaut quand une carte est ajoutee a un
- * pack.
- *
- * Grille de valeurs (CDC 7.2) : la valeur croit fortement avec la rarete afin
- * qu'une legendaire (obtenue ~1 fois sur 100) vaille bien plus qu'une pile de
- * communes. Ratio commune -> legendaire = 1:50, justifie dans le rapport.
- */
 class RaritySeeder extends Seeder
 {
     public function run(): void

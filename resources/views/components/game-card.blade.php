@@ -1,9 +1,5 @@
 @props(['card', 'locked' => false, 'selectable' => false])
 
-{{--
-    Vignette d'une carte de collection.
-    Le lisere colore reprend la couleur de la rarete pour un reperage immediat.
---}}
 <div
     {{ $attributes->merge(['class' => 'relative bg-white rounded-xl shadow-sm overflow-hidden border-t-4 transition hover:shadow-md']) }}
     style="border-color: {{ $card->rarity->color }}"

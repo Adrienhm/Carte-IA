@@ -33,7 +33,6 @@ class TradeServiceTest extends TestCase
 
         $trade = $this->service->propose($alice, $bob, [$aliceCard->id], [$bobCard->id]);
 
-        // Les deux exemplaires sont bloques par cet echange (CDC 5.1).
         $this->assertSame($trade->id, $aliceCard->fresh()->locked_by_trade_id);
         $this->assertSame($trade->id, $bobCard->fresh()->locked_by_trade_id);
     }
@@ -49,14 +48,11 @@ class TradeServiceTest extends TestCase
         $trade = $this->service->propose($alice, $bob, [$aliceCard->id], [$bobCard->id]);
         $this->service->accept($trade, $bob);
 
-        // Les exemplaires ont change de main, sans etre dupliques ni perdus.
         $this->assertSame($bob->id, $aliceCard->fresh()->user_id);
         $this->assertSame($alice->id, $bobCard->fresh()->user_id);
 
-        // Nombre total d'exemplaires inchange (aucune duplication).
         $this->assertSame(2, UserCard::count());
 
-        // Cartes debloquees apres transfert.
         $this->assertNull($aliceCard->fresh()->locked_by_trade_id);
         $this->assertNull($bobCard->fresh()->locked_by_trade_id);
 
@@ -71,7 +67,6 @@ class TradeServiceTest extends TestCase
 
         $trade = $this->service->propose($alice, $bob, [$aliceCard->id], []);
 
-        // L'initiateur ne peut pas s'auto-accepter l'echange.
         $this->expectException(RuntimeException::class);
         $this->service->accept($trade, $alice);
     }
@@ -86,7 +81,6 @@ class TradeServiceTest extends TestCase
         $trade = $this->service->propose($alice, $bob, [$aliceCard->id], [$bobCard->id]);
         $this->service->reject($trade, $bob);
 
-        // Rien n'a bouge, tout est debloque.
         $this->assertSame($alice->id, $aliceCard->fresh()->user_id);
         $this->assertSame($bob->id, $bobCard->fresh()->user_id);
         $this->assertNull($aliceCard->fresh()->locked_by_trade_id);
@@ -101,10 +95,8 @@ class TradeServiceTest extends TestCase
         $charlie = $this->makeUser();
         $aliceCard = $this->giveCard($alice, $this->makeCard());
 
-        // Premier echange bloque la carte d'Alice.
         $this->service->propose($alice, $bob, [$aliceCard->id], []);
 
-        // Elle ne peut pas la reproposer a Charlie en parallele.
         $this->expectException(RuntimeException::class);
         $this->service->propose($alice, $charlie, [$aliceCard->id], []);
     }
@@ -115,7 +107,6 @@ class TradeServiceTest extends TestCase
         $bob = $this->makeUser();
         $bobCard = $this->giveCard($bob, $this->makeCard());
 
-        // Alice tente d'offrir une carte de Bob comme si elle etait a elle.
         $this->expectException(RuntimeException::class);
         $this->service->propose($alice, $bob, [$bobCard->id], []);
     }

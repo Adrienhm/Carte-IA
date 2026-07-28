@@ -7,11 +7,6 @@ use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 
-/**
- * Generateur reel : GPT pour le nom/la description, DALL-E pour l'image
- * (CDC 9.1). Tous les appels partent du serveur (CDC 9.3) et la cle vient
- * exclusivement de la configuration, elle-meme alimentee par le .env.
- */
 class OpenAiCardGenerator implements CardGenerator
 {
     public function __construct(
@@ -75,7 +70,6 @@ class OpenAiCardGenerator implements CardGenerator
         $name = is_array($data) ? ($data['name'] ?? null) : null;
         $description = is_array($data) ? ($data['description'] ?? null) : null;
 
-        // Le nom impose par l'admin prime toujours sur la proposition du modele.
         $name = $request->name ?: $name;
 
         if (! is_string($name) || $name === '' || ! is_string($description) || $description === '') {
@@ -111,10 +105,6 @@ class OpenAiCardGenerator implements CardGenerator
         return $binary;
     }
 
-    /**
-     * Client HTTP preconfigure : authentification, base URI, timeout et
-     * politique de reessai sur les erreurs transitoires (CDC 9.3).
-     */
     private function request(): PendingRequest
     {
         return $this->http

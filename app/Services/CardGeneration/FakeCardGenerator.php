@@ -2,14 +2,6 @@
 
 namespace App\Services\CardGeneration;
 
-/**
- * Generateur de demonstration : ne fait aucun appel reseau et ne coute rien.
- *
- * Il produit un nom plausible, une description narrative et une illustration
- * PNG dessinee localement (GD) dont l'ambiance depend de la rarete. Cela
- * permet de developper, tester et faire la demo du projet sans cle d'API,
- * tout en respectant exactement le meme contrat que le driver OpenAI.
- */
 class FakeCardGenerator implements CardGenerator
 {
     /** @var list<string> */
@@ -60,10 +52,6 @@ class FakeCardGenerator implements CardGenerator
             .' '.$this->suffixes[array_rand($this->suffixes)];
     }
 
-    /**
-     * Dessine une illustration de substitution : un degrade colore selon la
-     * rarete, le nom de la carte et son type. Repli propre si GD est absent.
-     */
     private function drawImage(string $name, string $hexColor, string $type): ?string
     {
         if (! function_exists('imagecreatetruecolor')) {
@@ -76,7 +64,6 @@ class FakeCardGenerator implements CardGenerator
 
         [$r, $g, $b] = $this->hexToRgb($hexColor);
 
-        // Degrade vertical du sombre vers la couleur de rarete.
         for ($y = 0; $y < $height; $y++) {
             $ratio = $y / $height;
             $lr = (int) (($r * $ratio) + (18 * (1 - $ratio)));
@@ -86,7 +73,6 @@ class FakeCardGenerator implements CardGenerator
             imageline($img, 0, $y, $width, $y, $line);
         }
 
-        // Cadre.
         $frame = imagecolorallocate($img, min($r + 40, 255), min($g + 40, 255), min($b + 40, 255));
         imagesetthickness($img, 6);
         imagerectangle($img, 8, 8, $width - 9, $height - 9, $frame);

@@ -19,8 +19,6 @@ class InventoryController extends Controller
             'rarity' => ['nullable', 'exists:rarities,id'],
         ]);
 
-        // Regroupe les exemplaires par carte pour afficher une quantite plutot
-        // qu'une longue liste de doublons, tout en conservant le nombre bloque.
         $query = UserCard::query()
             ->where('user_cards.user_id', $user->id)
             ->join('cards', 'cards.id', '=', 'user_cards.card_id')
@@ -32,7 +30,6 @@ class InventoryController extends Controller
 
         $grouped = $query->get()->load('card.rarity', 'card.cardType');
 
-        // Valeur totale de l'inventaire (CDC 5.1), filtres inclus.
         $totalValue = $grouped->sum(fn ($row) => $row->qty * $row->card->value);
         $totalCards = $grouped->sum('qty');
 

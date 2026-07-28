@@ -35,7 +35,6 @@ class AdminAccessTest extends TestCase
     {
         $user = $this->makeUser(['banned_at' => now(), 'ban_reason' => 'triche']);
 
-        // Le middleware de bannissement deconnecte et renvoie au login.
         $this->actingAs($user)->get('/dashboard')->assertRedirect('/login');
         $this->assertGuest();
     }

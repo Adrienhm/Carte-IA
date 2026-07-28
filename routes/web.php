@@ -21,18 +21,14 @@ Route::get('/', function () {
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
-    // Packs (CDC 4.2 parcours principal)
     Route::get('/packs', [PackController::class, 'index'])->name('packs.index');
     Route::post('/packs/{pack}/open', [PackController::class, 'open'])->name('packs.open');
 
-    // Inventaire (CDC 5.1)
     Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
 
-    // Profils publics et annuaire des joueurs (CDC 5.1)
     Route::get('/players', [PlayerController::class, 'index'])->name('players.index');
     Route::get('/players/{user}', [PlayerController::class, 'show'])->name('players.show');
 
-    // Echanges (CDC 4.2 / 5.1)
     Route::get('/trades', [TradeController::class, 'index'])->name('trades.index');
     Route::get('/trades/create/{user}', [TradeController::class, 'create'])->name('trades.create');
     Route::post('/trades', [TradeController::class, 'store'])->name('trades.store');
@@ -41,13 +37,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/trades/{trade}/reject', [TradeController::class, 'reject'])->name('trades.reject');
     Route::post('/trades/{trade}/cancel', [TradeController::class, 'cancel'])->name('trades.cancel');
 
-    // Compte utilisateur (Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Back-office administrateur (CDC 4.3)
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/', AdminDashboardController::class)->name('dashboard');
 

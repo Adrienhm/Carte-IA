@@ -53,7 +53,6 @@ class PackController extends Controller
     {
         $pack->load('cards');
 
-        // Poids actuellement assignes, indexes par carte.
         $assigned = $pack->cards->mapWithKeys(fn (Card $c) => [$c->id => $c->pivot->weight])->all();
 
         return view('admin.packs.edit', [
@@ -82,8 +81,6 @@ class PackController extends Controller
 
     public function destroy(Pack $pack): RedirectResponse
     {
-        // restrictOnDelete : un pack encore detenu ou deja ouvert ne peut pas
-        // etre supprime (integrite de l'historique et des inventaires).
         if ($pack->userPacks()->exists() || $pack->openings()->exists()) {
             return back()->with('error', 'Impossible : ce pack est detenu par des joueurs ou a deja ete ouvert. Desactivez-le plutot.');
         }
@@ -120,9 +117,6 @@ class PackController extends Controller
         return $data;
     }
 
-    /**
-     * Assigne les cartes cochees avec un poids strictement positif (CDC 4.3).
-     */
     private function syncCards(Pack $pack, Request $request): void
     {
         /** @var array<int, int|string|null> $weights */

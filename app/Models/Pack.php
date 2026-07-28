@@ -53,18 +53,11 @@ class Pack extends Model
         $query->where('is_active', true);
     }
 
-    /**
-     * Somme des poids de la composition, denominateur des probabilites.
-     */
     public function totalWeight(): int
     {
         return (int) $this->cards->sum(fn (Card $card) => $card->pivot->weight);
     }
 
-    /**
-     * Un pack n'est ouvrable que s'il contient de quoi tirer : au moins une
-     * carte et une somme de poids strictement positive.
-     */
     public function isOpenable(): bool
     {
         return $this->cards->isNotEmpty() && $this->totalWeight() > 0;

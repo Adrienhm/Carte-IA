@@ -4,11 +4,6 @@ namespace App\Services\CardGeneration;
 
 use App\Models\Rarity;
 
-/**
- * Tire des statistiques (puissance, defense) dans les bornes de la rarete
- * (CDC 9.1 : "valeurs coherentes avec la rarete"). Une carte legendaire tape
- * donc statistiquement plus fort qu'une commune.
- */
 class StatRoller
 {
     /**

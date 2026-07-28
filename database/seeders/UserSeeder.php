@@ -8,10 +8,6 @@ use App\Models\UserPack;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
-/**
- * Comptes de demonstration : un administrateur et deux joueurs, chacun dote de
- * quelques packs pour pouvoir tester immediatement ouverture et echange.
- */
 class UserSeeder extends Seeder
 {
     public function run(): void
@@ -24,7 +20,6 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ],
         );
-        // is_admin n'est pas mass-assignable : on l'affecte explicitement.
         $admin->forceFill(['is_admin' => true])->save();
 
         $alice = User::updateOrCreate(
@@ -47,7 +42,6 @@ class UserSeeder extends Seeder
 
         $packs = Pack::all();
 
-        // Dote chaque joueur de 5 packs pour la demo.
         foreach ([$admin, $alice, $bob] as $user) {
             foreach ($packs as $pack) {
                 for ($i = 0; $i < 3; $i++) {

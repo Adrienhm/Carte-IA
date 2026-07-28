@@ -24,13 +24,11 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {{-- Mes cartes offertes --}}
                 <div>
                     <h3 class="font-semibold text-gray-800 mb-3">Mes cartes ({{ $myCards->count() }} disponibles)</h3>
                     @include('trades._picker', ['cards' => $myCards, 'group' => 'offered', 'name' => 'offered'])
                 </div>
 
-                {{-- Cartes demandees au partenaire --}}
                 <div>
                     <h3 class="font-semibold text-gray-800 mb-3">Cartes de {{ $partner->name }} ({{ $theirCards->count() }} disponibles)</h3>
                     @include('trades._picker', ['cards' => $theirCards, 'group' => 'requested', 'name' => 'requested'])

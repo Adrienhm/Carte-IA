@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
-/**
- * Types de cartes dynamiques (CDC 5.1 "Types dynamiques").
- */
 class CardTypeController extends Controller
 {
     public function index(): View
@@ -48,8 +45,6 @@ class CardTypeController extends Controller
 
     public function destroy(CardType $cardType): RedirectResponse
     {
-        // restrictOnDelete : un type encore porte par des cartes ne peut pas
-        // etre supprime sans casser l'integrite.
         if ($cardType->cards()->exists()) {
             return back()->with('error', 'Impossible : des cartes utilisent ce type.');
         }

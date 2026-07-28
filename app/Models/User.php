@@ -20,9 +20,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        // Champs de moderation : modifies uniquement via les routes admin
-        // protegees. 'is_admin' est volontairement EXCLU pour empecher toute
-        // elevation de privileges par assignation de masse.
         'banned_at',
         'ban_reason',
     ];
@@ -88,9 +85,6 @@ class User extends Authenticatable
         return $this->hasMany(Trade::class, 'receiver_id');
     }
 
-    /**
-     * Valeur cumulee de l'inventaire (CDC 5.1 "Valeur totale").
-     */
     public function collectionValue(): int
     {
         return (int) $this->cards()

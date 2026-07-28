@@ -51,7 +51,6 @@ class PackOpeningTest extends TestCase
         try {
             app(PackOpeningService::class)->open($user, $pack);
         } finally {
-            // Aucune carte distribuee malgre l'echec (atomicite).
             $this->assertSame(0, $user->cards()->count());
         }
     }

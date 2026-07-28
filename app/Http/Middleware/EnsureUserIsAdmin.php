@@ -6,9 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Reserve une route aux administrateurs (CDC 4.3).
- */
 class EnsureUserIsAdmin
 {
     public function handle(Request $request, Closure $next): Response

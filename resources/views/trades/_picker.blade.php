@@ -1,9 +1,3 @@
-{{--
-    Selecteur de cartes pour un echange. Chaque exemplaire (user_card) est une
-    case a cocher individuelle : on echange des exemplaires precis, pas des
-    quantites abstraites. $group est la cle du tableau Alpine ('offered' /
-    'requested'), $name le nom du champ ('offered[]' / 'requested[]').
---}}
 @if ($cards->isEmpty())
     <div class="bg-white rounded-xl shadow-sm p-8 text-center text-sm text-gray-500">Aucune carte echangeable.</div>
 @else

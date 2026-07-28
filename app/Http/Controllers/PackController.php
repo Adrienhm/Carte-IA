@@ -15,7 +15,6 @@ class PackController extends Controller
     {
         $user = $request->user();
 
-        // Nombre de packs de chaque type possede par le joueur.
         $owned = $user->packs()
             ->selectRaw('pack_id, COUNT(*) as qty')
             ->groupBy('pack_id')
@@ -23,7 +22,6 @@ class PackController extends Controller
 
         $packs = Pack::active()->orderBy('name')->get();
 
-        // Cartes tout juste tirees, a reveler (flash de l'action open).
         $revealed = collect();
         $openedPack = null;
         if ($opened = session('opened')) {
@@ -31,7 +29,6 @@ class PackController extends Controller
             $revealed = \App\Models\Card::with('rarity', 'cardType')
                 ->whereIn('id', $opened['cardIds'] ?? [])
                 ->get()
-                // Preserve l'ordre de tirage, doublons compris.
                 ->keyBy('id');
             $revealed = collect($opened['cardIds'] ?? [])->map(fn ($id) => $revealed->get($id))->filter();
         }
@@ -52,8 +49,6 @@ class PackController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        // Les cartes obtenues sont passees en session pour l'animation de
-        // reveal sur la page de resultat (CDC 4.2 etape 4).
         return redirect()
             ->route('packs.index')
             ->with('opened', [

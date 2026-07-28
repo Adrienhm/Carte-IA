@@ -12,7 +12,6 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        // Repartition de la collection par rarete, pour un apercu rapide.
         $byRarity = Rarity::orderBy('sort_order')
             ->withCount(['cards as owned_count' => fn ($q) => $q->join('user_cards', 'user_cards.card_id', '=', 'cards.id')->where('user_cards.user_id', $user->id)])
             ->get();

@@ -47,11 +47,9 @@ class CardGenerationTest extends TestCase
         $card = app(CardComposer::class)->compose(new CardGenerationRequest($type, $rarity));
         $card->save();
 
-        // Valeur par defaut = grille de la rarete (CDC 7.2).
         $this->assertSame(250, $card->value);
         $this->assertTrue($card->is_ai_generated);
 
-        // L'illustration a bien ete stockee localement (CDC 9.3).
         $this->assertNotNull($card->image_path);
         Storage::disk('public')->assertExists($card->image_path);
     }

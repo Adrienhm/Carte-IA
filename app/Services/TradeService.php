@@ -9,20 +9,9 @@ use App\Models\UserCard;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
-/**
- * Echange securise entre joueurs (CDC 4.2, 5.1, 6).
- *
- * Regles garanties par ce service :
- *  - possession reelle verifiee cote serveur a la creation ET a l'acceptation ;
- *  - blocage des exemplaires engages tant que l'echange est en attente ;
- *  - transfert atomique tout-ou-rien (aucune carte dupliquee ni perdue) ;
- *  - validation bilaterale (seul le destinataire accepte/refuse).
- */
 class TradeService
 {
     /**
-     * Cree une proposition d'echange et bloque les cartes concernees.
-     *
      * @param  list<int>  $offeredUserCardIds  exemplaires de l'initiateur
      * @param  list<int>  $requestedUserCardIds exemplaires du destinataire
      */
@@ -42,9 +31,6 @@ class TradeService
         }
 
         return DB::transaction(function () use ($sender, $receiver, $offeredUserCardIds, $requestedUserCardIds, $message) {
-            // Verrouille et valide les exemplaires de chaque camp. Le verrou
-            // pessimiste empeche qu'un meme exemplaire soit engage dans deux
-            // echanges crees simultanement.
             $offered = $this->lockAndValidateOwnership($offeredUserCardIds, $sender);
             $requested = $this->lockAndValidateOwnership($requestedUserCardIds, $receiver);
 
@@ -58,17 +44,12 @@ class TradeService
             $this->attachItems($trade, $offered, TradeItem::SIDE_OFFERED);
             $this->attachItems($trade, $requested, TradeItem::SIDE_REQUESTED);
 
-            // Blocage : les exemplaires ne peuvent plus etre engages ailleurs
-            // tant que cet echange est en attente (CDC 5.1).
             $this->lockCards($offered->merge($requested), $trade);
 
             return $trade;
         });
     }
 
-    /**
-     * Le destinataire accepte : les cartes changent de proprietaire.
-     */
     public function accept(Trade $trade, User $actingUser): void
     {
         DB::transaction(function () use ($trade, $actingUser) {
@@ -82,9 +63,6 @@ class TradeService
 
             $items = $trade->items()->with('userCard')->get();
 
-            // Re-verification de possession au moment de l'acceptation : on
-            // s'assure que chaque exemplaire appartient toujours au bon joueur
-            // et reste bien bloque par cet echange (CDC 6).
             foreach ($items as $item) {
                 $card = $item->userCard;
                 $expectedOwner = $item->side === TradeItem::SIDE_OFFERED
@@ -98,7 +76,6 @@ class TradeService
                 }
             }
 
-            // Transfert : offert -> destinataire, demande -> initiateur.
             foreach ($items as $item) {
                 $newOwner = $item->side === TradeItem::SIDE_OFFERED
                     ? $trade->receiver_id
@@ -118,9 +95,6 @@ class TradeService
         });
     }
 
-    /**
-     * Le destinataire refuse : les cartes sont debloquees, rien ne bouge.
-     */
     public function reject(Trade $trade, User $actingUser): void
     {
         DB::transaction(function () use ($trade, $actingUser) {
@@ -140,9 +114,6 @@ class TradeService
         });
     }
 
-    /**
-     * L'initiateur annule sa propre proposition encore en attente.
-     */
     public function cancel(Trade $trade, User $actingUser): void
     {
         DB::transaction(function () use ($trade, $actingUser) {
@@ -163,9 +134,6 @@ class TradeService
     }
 
     /**
-     * Verrouille les exemplaires vises et verifie qu'ils appartiennent bien a
-     * $owner et qu'ils sont disponibles (non deja engages ailleurs).
-     *
      * @param  list<int>  $userCardIds
      * @return \Illuminate\Support\Collection<int, UserCard>
      */

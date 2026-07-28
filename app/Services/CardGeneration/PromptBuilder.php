@@ -2,16 +2,8 @@
 
 namespace App\Services\CardGeneration;
 
-/**
- * Construit dynamiquement les prompts envoyes a l'IA a partir des parametres
- * de la carte (CDC 9.2). Centralise ici pour que les differents drivers
- * partagent exactement la meme logique de prompt.
- */
 class PromptBuilder
 {
-    /**
-     * Prompt pour l'API d'image, suivant le patron suggere par le CDC 9.2.
-     */
     public function imagePrompt(CardGenerationRequest $request, string $cardName): string
     {
         $theme = config('cards.theme');
@@ -34,20 +26,12 @@ class PromptBuilder
         return $prompt;
     }
 
-    /**
-     * Consigne systeme pour l'API de texte : cadre l'univers et impose une
-     * sortie JSON exploitable directement.
-     */
     public function textSystemPrompt(): string
     {
         return 'You design collectible cards for '.config('cards.theme').'. '
             .'Answer only with strict JSON, no markdown, no commentary.';
     }
 
-    /**
-     * Consigne utilisateur pour l'API de texte : demande nom et description
-     * coherents avec le type et la rarete fournis.
-     */
     public function textUserPrompt(CardGenerationRequest $request): string
     {
         $imposedName = $request->name

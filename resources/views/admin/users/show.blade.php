@@ -37,7 +37,6 @@
                 </div>
             </div>
 
-            {{-- Attribuer un pack --}}
             <div class="bg-white rounded-xl shadow-sm p-5">
                 <h3 class="font-semibold text-gray-800 mb-3">Attribuer des packs</h3>
                 <form method="POST" action="{{ route('admin.users.grant-pack', $user) }}" class="flex flex-wrap items-end gap-3">
@@ -58,7 +57,6 @@
                 </form>
             </div>
 
-            {{-- Inventaire --}}
             <div class="bg-white rounded-xl shadow-sm p-5">
                 <h3 class="font-semibold text-gray-800 mb-3">Inventaire ({{ $cards->count() }})</h3>
                 @if ($cards->isEmpty())

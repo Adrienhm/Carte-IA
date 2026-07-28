@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-/**
- * Un exemplaire de carte possede par un joueur.
- */
 class UserCard extends Model
 {
     use HasFactory;
@@ -46,9 +43,6 @@ class UserCard extends Model
     }
 
     /**
-     * Exemplaires disponibles : ni engages dans un echange en cours, ni
-     * autrement immobilises.
-     *
      * @param Builder<UserCard> $query
      */
     public function scopeAvailable(Builder $query): void

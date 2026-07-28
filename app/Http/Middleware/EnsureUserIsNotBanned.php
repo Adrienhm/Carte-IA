@@ -7,10 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Deconnecte et bloque tout joueur banni (CDC 4.3 "bannir des joueurs").
- * Le bannissement prend effet immediatement, meme si une session etait ouverte.
- */
 class EnsureUserIsNotBanned
 {
     public function handle(Request $request, Closure $next): Response

@@ -52,7 +52,6 @@ class CardController extends Controller
             $card = $composer->compose(new CardGenerationRequest($cardType, $rarity, $validated['name'] ?? null));
             $card->save();
         } catch (CardGenerationException $e) {
-            // Echec propre + possibilite de reessayer (CDC 9.3).
             return back()->with('error', 'Generation IA echouee : '.$e->getMessage())->withInput();
         }
 
@@ -93,8 +92,6 @@ class CardController extends Controller
 
     public function destroy(Card $card): RedirectResponse
     {
-        // restrictOnDelete au niveau base : une carte encore possedee ou
-        // engagee ne peut pas etre supprimee. On le signale proprement.
         if ($card->copies()->exists()) {
             return back()->with('error', 'Impossible : des joueurs possedent encore cette carte. Desactivez-la plutot.');
         }

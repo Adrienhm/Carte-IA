@@ -9,9 +9,6 @@ use Illuminate\View\View;
 
 class PlayerController extends Controller
 {
-    /**
-     * Annuaire des joueurs, point d'entree vers les profils et les echanges.
-     */
     public function index(Request $request): View
     {
         $search = $request->string('search')->toString();
@@ -30,12 +27,8 @@ class PlayerController extends Controller
         ]);
     }
 
-    /**
-     * Profil public : cartes et statistiques d'un autre joueur (CDC 5.1).
-     */
     public function show(Request $request, User $user): View
     {
-        // Collection publique regroupee par carte (quantite affichee).
         $grouped = UserCard::query()
             ->where('user_cards.user_id', $user->id)
             ->join('cards', 'cards.id', '=', 'user_cards.card_id')

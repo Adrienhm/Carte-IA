@@ -12,7 +12,6 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            {{-- Filtres par type et par rarete (CDC 5.1) --}}
             <form method="GET" class="bg-white rounded-xl shadow-sm p-4 flex flex-wrap items-end gap-4">
                 <div>
                     <label class="block text-xs font-medium text-gray-600 mb-1">Type</label>

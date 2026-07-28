@@ -9,7 +9,6 @@
     <div class="py-8">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-            {{-- Generation IA rapide (CDC 5.1) --}}
             <div class="bg-white rounded-xl shadow-sm p-5">
                 <h3 class="font-semibold text-gray-800 mb-3">⚡ Generer une carte par IA</h3>
                 <form method="POST" action="{{ route('admin.cards.generate') }}" class="flex flex-wrap items-end gap-3">
@@ -38,7 +37,6 @@
                 </form>
             </div>
 
-            {{-- Filtres --}}
             <form method="GET" class="flex flex-wrap gap-3">
                 <select name="type" class="rounded-lg border-gray-300 text-sm" onchange="this.form.submit()">
                     <option value="">Tous les types</option>

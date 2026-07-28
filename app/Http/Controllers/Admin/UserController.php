@@ -74,9 +74,6 @@ class UserController extends Controller
         return back()->with('success', $user->name.' a ete debanni.');
     }
 
-    /**
-     * Supprime un exemplaire precis de l'inventaire d'un joueur (CDC 4.3).
-     */
     public function destroyCard(User $user, UserCard $userCard): RedirectResponse
     {
         abort_unless($userCard->user_id === $user->id, 404);
@@ -90,9 +87,6 @@ class UserController extends Controller
         return back()->with('success', 'Carte retiree de l\'inventaire du joueur.');
     }
 
-    /**
-     * Attribue un pack a un joueur (utile pour la demo et les recompenses).
-     */
     public function grantPack(Request $request, User $user): RedirectResponse
     {
         $validated = $request->validate([

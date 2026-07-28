@@ -11,15 +11,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
-/**
- * Ouverture d'un pack par un joueur (CDC 4.2 parcours principal).
- *
- * Tout se joue cote serveur, dans une transaction : on verrouille un
- * exemplaire de pack possede par le joueur, on tire N cartes selon les poids
- * de la composition, on les ajoute a l'inventaire et on consomme le pack.
- * L'ensemble est atomique : en cas d'erreur, rien n'est distribue et le pack
- * n'est pas consomme (CDC 6 "Integrite des donnees").
- */
 class PackOpeningService
 {
     public function __construct(private readonly WeightedDrawService $draw)
@@ -32,8 +23,6 @@ class PackOpeningService
     public function open(User $user, Pack $pack): Collection
     {
         return DB::transaction(function () use ($user, $pack) {
-            // Verrou pessimiste : empeche une double ouverture concurrente du
-            // meme pack (deux onglets, double clic) de dupliquer les cartes.
             $userPack = UserPack::query()
                 ->where('user_id', $user->id)
                 ->where('pack_id', $pack->id)
@@ -44,8 +33,6 @@ class PackOpeningService
                 throw new RuntimeException("Vous ne possedez pas ce pack.");
             }
 
-            // On recharge la composition dans la transaction pour tirer sur des
-            // poids a jour, jamais sur des valeurs venues du client.
             $pack->load('cards');
 
             if (! $pack->isOpenable()) {
@@ -74,7 +61,6 @@ class PackOpeningService
                 ]));
             }
 
-            // Le pack est consomme apres un tirage reussi.
             $userPack->delete();
 
             return $obtained;

@@ -6,14 +6,6 @@ use App\Models\Card;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-/**
- * Orchestre la generation d'une carte : appelle le driver IA, stocke
- * localement l'illustration recue (CDC 9.3 "images stockees localement pour
- * eviter les appels repetes") et prepare les attributs du modele Card.
- *
- * Le composer ne persiste PAS la carte en base : il rend un modele non
- * sauvegarde, laissant le controleur decider (creation ou previsualisation).
- */
 class CardComposer
 {
     public function __construct(private readonly CardGenerator $generator)
@@ -31,7 +23,6 @@ class CardComposer
             'description' => $generated->description,
             'card_type_id' => $request->cardType->id,
             'rarity_id' => $request->rarity->id,
-            // Valeur par defaut = grille de la rarete (CDC 7.2), ajustable ensuite.
             'value' => $request->rarity->base_value,
             'power' => $generated->power,
             'defense' => $generated->defense,

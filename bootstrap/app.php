@@ -16,9 +16,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'not.banned' => \App\Http\Middleware\EnsureUserIsNotBanned::class,
         ]);
 
-        // Tout utilisateur authentifie est verifie contre le bannissement.
         $middleware->appendToGroup('web', \App\Http\Middleware\EnsureUserIsNotBanned::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
     })->create();

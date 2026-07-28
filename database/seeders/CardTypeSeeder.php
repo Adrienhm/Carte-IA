@@ -5,10 +5,6 @@ namespace Database\Seeders;
 use App\Models\CardType;
 use Illuminate\Database\Seeder;
 
-/**
- * Types de cartes de depart (CDC 5.1 "Types dynamiques"). L'administrateur
- * peut ensuite en ajouter, modifier ou supprimer depuis le back-office.
- */
 class CardTypeSeeder extends Seeder
 {
     public function run(): void

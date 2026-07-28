@@ -69,10 +69,6 @@ class Card extends Model
         $query->where('is_active', true);
     }
 
-    /**
-     * URL de l'illustration, avec repli sur un visuel neutre tant que l'IA n'a
-     * rien produit pour cette carte.
-     */
     public function imageUrl(): string
     {
         if ($this->image_path && Storage::disk('public')->exists($this->image_path)) {

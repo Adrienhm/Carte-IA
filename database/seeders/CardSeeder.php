@@ -8,12 +8,6 @@ use App\Services\CardGeneration\CardComposer;
 use App\Services\CardGeneration\CardGenerationRequest;
 use Illuminate\Database\Seeder;
 
-/**
- * Peuple le catalogue via le service de generation IA lui-meme (driver "fake"
- * par defaut), ce qui exerce toute la chaine de generation et produit des
- * illustrations de demonstration. Chaque type recoit des cartes reparties sur
- * les quatre raretes.
- */
 class CardSeeder extends Seeder
 {
     public function run(CardComposer $composer): void
@@ -21,8 +15,6 @@ class CardSeeder extends Seeder
         $types = CardType::all();
         $rarities = Rarity::orderBy('sort_order')->get()->keyBy('slug');
 
-        // Nombre de cartes generees par type et par rarete. On produit plus de
-        // communes que de legendaires, cote catalogue comme cote tirage.
         $countByRarity = [
             'commune' => 3,
             'rare' => 2,

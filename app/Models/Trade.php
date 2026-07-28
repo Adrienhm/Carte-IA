@@ -73,10 +73,6 @@ class Trade extends Model
         $query->where('status', self::STATUS_PENDING);
     }
 
-    /**
-     * Un echange concerne exactement deux joueurs : toute action dessus doit
-     * etre verifiee cote serveur contre cette liste (CDC 5.1 securite).
-     */
     public function involves(User $user): bool
     {
         return $this->sender_id === $user->id || $this->receiver_id === $user->id;

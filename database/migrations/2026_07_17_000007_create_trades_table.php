@@ -11,7 +11,6 @@ return new class extends Migration
         Schema::create('trades', function (Blueprint $table) {
             $table->id();
 
-            // Initiateur de l'echange et destinataire de la proposition.
             $table->foreignId('sender_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('receiver_id')->constrained('users')->cascadeOnDelete();
 

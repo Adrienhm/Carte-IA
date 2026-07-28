@@ -1,9 +1,3 @@
-{{--
-    Formulaire de pack avec composition. Chaque carte peut recevoir un poids ;
-    poids 0 (ou vide) = carte absente du pack. Un bloc Alpine recalcule en
-    direct la probabilite de chaque carte (poids / somme des poids), ce qui
-    rend l'equilibrage lisible pour l'administrateur (CDC 4.3).
---}}
 @php
     $assigned = $assigned ?? [];
     $cardsData = $cards->map(fn ($c) => [
